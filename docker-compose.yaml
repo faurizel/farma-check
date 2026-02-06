@@ -1,0 +1,67 @@
+services:
+  # Serviço de Banco de Dados (PostgreSQL)
+  database:
+    container_name: postgres_farmacheck
+    image: postgres:17
+    ports:
+      - '${DB_PORT}:5432'
+    environment:
+      POSTGRES_USER: ${DB_USERNAME}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  # Interface Visual para o Banco (PGAdmin)
+  pgadmin:
+    container_name: pgadmin_farmacheck
+    image: dpage/pgadmin4
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${DB_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${DB_PASSWORD}
+    ports:
+      - '${PGADMIN_PORT}:80'
+    depends_on:
+      - database
+
+  # Zookeeper (Necessário para o Kafka)
+  zookeeper:
+    image: confluentinc/cp-zookeeper:7.5.0
+    container_name: zookeeper_farmacheck
+    hostname: zookeeper
+    ports:
+      - "2181:2181"
+    environment:
+      ZOOKEEPER_CLIENT_PORT: 2181
+      ZOOKEEPER_TICK_TIME: 2000
+
+  # Kafka (Mensageria para Notificações)
+  kafka:
+    image: confluentinc/cp-kafka:7.5.0
+    container_name: kafka_farmacheck
+    hostname: kafka
+    depends_on:
+      - zookeeper
+    ports:
+      - "9092:9092"
+    environment:
+      KAFKA_BROKER_ID: 1
+      KAFKA_ZOOKEEPER_CONNECT: 'zookeeper:2181'
+      KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+      KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka:29092,PLAINTEXT_HOST://localhost:9092
+      KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+      KAFKA_GROUP_INITIAL_REBALANCE_DELAY_MS: 0
+
+  # Servidor de E-mail Fake (Para testar notificações)
+  smtp-server:
+    image: haravich/fake-smtp-server
+    container_name: fake-smtp-server
+    ports:
+      - "1080:1080" # Painel Web para ver os e-mails
+      - "1025:1025" # Porta SMTP
+    volumes:
+      - smtp_data:/var/mail
+
+volumes:
+  pgdata: {}
+  smtp_data: {}
