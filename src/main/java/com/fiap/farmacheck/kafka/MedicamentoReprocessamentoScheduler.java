@@ -3,6 +3,7 @@ package com.fiap.farmacheck.kafka;
 import com.fiap.farmacheck.model.dto.disponibilidade.MedicamentoIndisponivelEvent;
 import com.fiap.farmacheck.model.entity.Estoque;
 import com.fiap.farmacheck.repository.EstoqueRepository;
+import com.fiap.farmacheck.service.EmailService;
 import org.apache.kafka.clients.consumer.ConsumerRecord;
 import org.apache.kafka.clients.consumer.ConsumerRecords;
 import org.apache.kafka.clients.consumer.KafkaConsumer;
@@ -25,6 +26,7 @@ public class MedicamentoReprocessamentoScheduler {
     private static final Logger logger = LoggerFactory.getLogger(MedicamentoReprocessamentoScheduler.class);
 
     private final EstoqueRepository estoqueRepository;
+    private final EmailService emailService;
 
     @Value("${spring.kafka.bootstrap-servers}")
     private String bootstrapServers;
@@ -32,8 +34,9 @@ public class MedicamentoReprocessamentoScheduler {
     @Value("${farmacheck.kafka.topic.medicamento-indisponivel}")
     private String topic;
 
-    public MedicamentoReprocessamentoScheduler(EstoqueRepository estoqueRepository) {
+    public MedicamentoReprocessamentoScheduler(EstoqueRepository estoqueRepository, EmailService emailService) {
         this.estoqueRepository = estoqueRepository;
+        this.emailService = emailService;
     }
 
     @Scheduled(fixedDelayString = "${farmacheck.kafka.reprocessamento.intervalo-ms}")
@@ -70,8 +73,13 @@ public class MedicamentoReprocessamentoScheduler {
                         .findByMedicamentoNomeIgnoreCaseAndQuantidadeGreaterThan(event.getNomeMedicamento(), 0);
 
                 if (!estoques.isEmpty()) {
-                    logger.info("Medicamento '{}' agora DISPONIVEL! Notificar usuario: {} ({})",
-                            event.getNomeMedicamento(), event.getNomeUsuario(), event.getEmailUsuario());
+                    logger.info("Medicamento '{}' agora DISPONIVEL! Enviando email para: {}",
+                            event.getNomeMedicamento(), event.getEmailUsuario());
+                    emailService.enviarNotificacaoDisponibilidade(
+                            event.getEmailUsuario(),
+                            event.getNomeUsuario(),
+                            event.getNomeMedicamento()
+                    );
                 } else {
                     logger.info("Medicamento '{}' continua INDISPONIVEL. Pesquisa de: {} ({})",
                             event.getNomeMedicamento(), event.getNomeUsuario(), event.getEmailUsuario());
