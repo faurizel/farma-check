@@ -39,6 +39,12 @@ public class SecurityConfiguration {
     public static final String [] ENDPOINTS_WITH_AUTHENTICATION_REQUIRED = {
             "/api/test",
             "/api/medicamentos/disponibilidade",
+            "/api/estoques",
+            "/api/estoques/{id}",
+            "/api/unidades",
+            "/api/unidades/{id}",
+            "/api/movimentacoes",
+            "/api/movimentacoes/{id}",
     };
 
     // Endpoints que só podem ser acessador por usuários com permissão de "administrador(a)"
@@ -46,6 +52,12 @@ public class SecurityConfiguration {
             "/api/test/administrador",
             "/api/medicamentos",
             "/api/medicamentos/{id}",
+            "/api/estoques",
+            "/api/estoques/{id}",
+            "/api/unidades",
+            "/api/unidades/{id}",
+            "/api/movimentacoes",
+            "/api/movimentacoes/{id}",
     };
 
     // Endpoints que só podem ser acessador por usuários com permissão de "paciente"
