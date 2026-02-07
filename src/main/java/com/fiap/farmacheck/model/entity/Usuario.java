@@ -13,6 +13,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "usuario")
 public class Usuario extends Auditoria {
 
     @Id

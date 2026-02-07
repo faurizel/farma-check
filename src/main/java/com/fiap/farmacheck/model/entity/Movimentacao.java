@@ -12,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "movimentacao")
 public class Movimentacao extends Auditoria{
 
     @Id

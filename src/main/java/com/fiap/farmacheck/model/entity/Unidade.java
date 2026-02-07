@@ -12,6 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+@Table(name = "unidade")
 public class Unidade extends Auditoria {
 
     @Id
