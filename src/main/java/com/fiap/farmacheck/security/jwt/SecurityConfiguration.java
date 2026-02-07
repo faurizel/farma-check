@@ -50,6 +50,8 @@ public class SecurityConfiguration {
     // Endpoints que só podem ser acessador por usuários com permissão de "administrador(a)"
     public static final String [] ENDPOINTS_ADMINISTRADOR = {
             "/api/test/administrador",
+            "/api/medicamentos",
+            "/api/medicamentos/{id}",
             "/api/estoques",
             "/api/estoques/{id}",
             "/api/unidades",

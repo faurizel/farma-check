@@ -6,13 +6,17 @@ import com.fiap.farmacheck.model.dto.estoque.EstoqueRequestDTO;
 import com.fiap.farmacheck.model.dto.estoque.EstoqueResponseDTO;
 import com.fiap.farmacheck.model.entity.Estoque;
 import com.fiap.farmacheck.repository.EstoqueRepository;
+
+
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service
+
 public class EstoqueService {
 
     private static final Logger logger = LoggerFactory.getLogger(EstoqueService.class);
@@ -32,6 +36,7 @@ public class EstoqueService {
         return estoqueMapper.toResponse(salvo);
     }
 
+    @Transactional(readOnly = true)
     public List<EstoqueResponseDTO> listarTodos() {
         return estoqueRepository.findAll()
                 .stream()

@@ -6,8 +6,9 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+import lombok.Builder;
 
-
+@Builder
 public record UsuarioRequestDTO(
         @NotBlank(message = "O nome é obrigatório")
         @Size(min = 2, max = 100, message = "nome deve ter entre 2 e 100 caracteres")

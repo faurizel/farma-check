@@ -17,7 +17,7 @@ public interface EstoqueMapper {
     Estoque toEntity(EstoqueRequestDTO dto);
 
     // 2. CONVERSÃO (Entity -> DTO)
-    @Mapping(target = "auditoria", source = ".")
+    @Mapping(target = "unidade", source = "unidade")
     EstoqueResponseDTO toResponse(Estoque entity);
 
     // 3. ATUALIZAÇÃO (DTO -> Entity Existente)
@@ -28,4 +28,5 @@ public interface EstoqueMapper {
     @Mapping(source = "idUnidade", target = "unidade")
     @Mapping(source = "idMedicamento", target = "medicamento")
     void updateEntityFromDto(EstoqueRequestDTO dto, @MappingTarget Estoque entity);
+
 }
