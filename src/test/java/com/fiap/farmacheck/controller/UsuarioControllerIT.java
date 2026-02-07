@@ -39,11 +39,12 @@ public class UsuarioControllerIT {
 
     @Test
     void criarUsuario_deveRetornar201_eLocation() throws Exception {
-        UsuarioRequestDTO request = UsuarioRequestDTO.builder()
-                .nome("Maria Souza")
-                .email("maria.souza@example.com")
-                .tipoUsuario(TipoUsuario.PACIENTE)
-                .build();
+        UsuarioRequestDTO request = new UsuarioRequestDTO(
+                "Maria Souza",
+                "maria.souza@example.com",
+                "senha12345",
+                TipoUsuario.PACIENTE,
+                1);
 
         mockMvc.perform(post("/api/usuarios")
                         .contentType(MediaType.APPLICATION_JSON)
@@ -57,11 +58,12 @@ public class UsuarioControllerIT {
 
     @Test
     void criarUsuario_comEmailDuplicado_deveRetornar409() throws Exception {
-        UsuarioRequestDTO request = UsuarioRequestDTO.builder()
-                .nome("Carlos")
-                .email("carlos@example.com")
-                .tipoUsuario(TipoUsuario.ADMINISTRADOR)
-                .build();
+        UsuarioRequestDTO request = new UsuarioRequestDTO(
+                "Carlos",
+                "carlos@example.com",
+                "senha12345",
+                TipoUsuario.ADMINISTRADOR,
+                1);
 
         // cria o primeiro
         mockMvc.perform(post("/api/usuarios")
