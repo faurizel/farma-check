@@ -52,7 +52,7 @@ public class SwaggerConfig {
                         .description("Documentacao Tecnica Completa")
                         .url("https://github.com/offteuz/farma-check"))
                 .addTagsItem(new Tag().name("Auth"))
-                .addTagsItem(new Tag().name("Medicamentos"))
+                .addTagsItem(new Tag().name("Disponibilidade"))
                 .addTagsItem(new Tag().name("Estoques"))
                 .addTagsItem(new Tag().name("Unidades"))
                 .addTagsItem(new Tag().name("Movimentacoes"))
