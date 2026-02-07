@@ -6,6 +6,8 @@ import com.fiap.farmacheck.model.dto.usuario.UsuarioRequestDTO;
 import com.fiap.farmacheck.security.service.UserDetailsImpl;
 import com.fiap.farmacheck.service.AuthService;
 import com.fiap.farmacheck.service.JwtTokenService;
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -28,6 +30,8 @@ public class AuthController {
         this.authService = authService;
     }
 
+    @Tag(name = "Auth")
+    @Operation(summary = "Realiza login")
     @PostMapping("/auth/sign-in")
     @ResponseStatus(HttpStatus.OK)
     public TokenResponseDTO authenticateUser(@Valid @RequestBody UsuarioLoginRequestDTO dto) {
@@ -43,24 +47,32 @@ public class AuthController {
         return new TokenResponseDTO(token);
     }
 
+    @Tag(name = "Auth")
+    @Operation(summary = "Registra um novo usuario")
     @PostMapping("/auth/sign-up")
     @ResponseStatus(HttpStatus.CREATED)
     public void registerUser(@Valid @RequestBody UsuarioRequestDTO dto) {
         authService.registerUser(dto);
     }
 
+    @Tag(name = "Testes")
+    @Operation(summary = "Testa autenticacao independente da role")
     @GetMapping("/test")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> getAuthenticationTest() {
         return new ResponseEntity<>("Autenticado com sucesso", HttpStatus.OK);
     }
 
+    @Tag(name = "Testes")
+    @Operation(summary = "Testa autenticacao como administrador")
     @GetMapping("/test/administrador")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> getAdministradorAuthenticationTest() {
         return new ResponseEntity<>("Administrador(a) autenticado com sucesso", HttpStatus.OK);
     }
 
+    @Tag(name = "Testes")
+    @Operation(summary = "Testa autenticacao como paciente")
     @GetMapping("/test/paciente")
     @ResponseStatus(HttpStatus.OK)
     public ResponseEntity<String> getPacienteAuthenticationTest() {
